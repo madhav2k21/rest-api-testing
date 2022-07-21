@@ -2,18 +2,22 @@ package com.techleads.app.service;
 
 import com.techleads.app.exception.UserNotFoundException;
 import com.techleads.app.model.Users;
+import com.techleads.app.model.UsersDTO;
 import com.techleads.app.repository.UsersRepository;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 
 @Service
 public class UsersService {
     @Autowired
     private UsersRepository usersRepository;
+    @Autowired
+    private ModelMapper modelMapper;
+
 
     public Users findUserById(Integer id) {
         Optional<Users> userById = usersRepository.findById(id);
@@ -26,12 +30,7 @@ public class UsersService {
         return usersRepository.findAll();
     }
 
-    public String saveUser(Users user) {
-        Users createdUser = usersRepository.save(user);
-        if (Objects.nonNull(createdUser)) {
-            return "User is created";
-        }
-        return "User not created";
-
+    public Users saveUser(UsersDTO user) {
+        return usersRepository.save(modelMapper.map(user, Users.class));
     }
 }

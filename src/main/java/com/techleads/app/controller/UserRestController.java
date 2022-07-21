@@ -7,7 +7,9 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -40,8 +42,11 @@ public class UserRestController {
     }
 
     @PostMapping
-    public ResponseEntity<String> createUser(@RequestBody Users user) {
-        return null;
+    public ResponseEntity<UsersDTO> createUser(@RequestBody UsersDTO user) {
+        Users createdUser = usersService.saveUser(user);
+        URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
+                .path("/{id}").buildAndExpand(createdUser.getId()).toUri();
+        return ResponseEntity.created(uri).build();
     }
 }
 
