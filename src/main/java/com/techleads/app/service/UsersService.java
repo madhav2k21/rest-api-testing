@@ -23,7 +23,7 @@ public class UsersService {
     public Users findUserById(Integer id) {
         Optional<Users> userById = usersRepository.findById(id);
         return userById.orElseThrow(
-                () -> new UserNotFoundException("User is found with Id: " + id)
+                () -> new UserNotFoundException("User is not found with Id: " + id)
         );
     }
 
@@ -32,15 +32,25 @@ public class UsersService {
     }
 
     public Users saveUser(UsersDTO user) {
-        Optional<Users> userByEmail = usersRepository.findUserByEmail(user.getEmail());
-        if(userByEmail.isPresent()){
-            throw new DuplicateEmailException("Email id: "+user.getEmail()+" is already exists");
-        }
+        checkUniqueEmailAddress(user);
 
         return usersRepository.save(modelMapper.map(user, Users.class));
     }
 
-    public Users uddateUser(UsersDTO user){
+    private void checkUniqueEmailAddress(UsersDTO user) {
+        Optional<Users> userByEmail = usersRepository.findUserByEmail(user.getEmail());
+        if (userByEmail.isPresent() && (user.getId() != userByEmail.get().getId())) {
+            throw new DuplicateEmailException("Email id: " + user.getEmail() + " is already exists");
+        }
+    }
+
+    public Users uddateUser(UsersDTO user) {
+        checkUniqueEmailAddress(user);
         return usersRepository.save(modelMapper.map(user, Users.class));
+    }
+
+    public void deleteUserById(Integer id) {
+        findUserById(id);
+        usersRepository.deleteById(id);
     }
 }

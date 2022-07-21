@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import javax.swing.text.html.parser.Entity;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
@@ -54,6 +55,12 @@ public class UserRestController {
         user.setId(id);
         Users updatedUser = usersService.uddateUser(user);
         return ResponseEntity.ok().body(modelMapper.map(updatedUser, UsersDTO.class));
+    }
+
+    @DeleteMapping(value = {"/{id}"})
+    public ResponseEntity<UsersDTO> deleteUserById(@PathVariable("id") Integer id){
+        usersService.deleteUserById(id);
+        return ResponseEntity.noContent().build();
     }
 }
 
