@@ -1,5 +1,6 @@
 package com.techleads.app.service;
 
+import com.techleads.app.exception.DuplicateEmailException;
 import com.techleads.app.exception.UserNotFoundException;
 import com.techleads.app.model.Users;
 import com.techleads.app.model.UsersDTO;
@@ -31,6 +32,11 @@ public class UsersService {
     }
 
     public Users saveUser(UsersDTO user) {
+        Optional<Users> userByEmail = usersRepository.findUserByEmail(user.getEmail());
+        if(userByEmail.isPresent()){
+            throw new DuplicateEmailException("Email id: "+user.getEmail()+" is already exists");
+        }
+
         return usersRepository.save(modelMapper.map(user, Users.class));
     }
 }

@@ -18,4 +18,12 @@ public class UserControllerAdvice {
 
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(standardError);
     }
+
+    @ExceptionHandler(DuplicateEmailException.class)
+    public ResponseEntity<StandardError> handleDuplicateEmailException(DuplicateEmailException ex, HttpServletRequest request) {
+        StandardError standardError = new StandardError(LocalDateTime.now(),
+                HttpStatus.BAD_REQUEST.value(), ex.getMessage(), request.getRequestURI());
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(standardError);
+    }
 }
