@@ -53,7 +53,7 @@ public class UserRestController {
     @PutMapping(value = {"/{id}"})
     public ResponseEntity<UsersDTO> updateUser(@PathVariable("id") Integer id, @RequestBody UsersDTO user) {
         user.setId(id);
-        Users updatedUser = usersService.uddateUser(user);
+        Users updatedUser = usersService.updateUser(user);
         return ResponseEntity.ok().body(modelMapper.map(updatedUser, UsersDTO.class));
     }
 

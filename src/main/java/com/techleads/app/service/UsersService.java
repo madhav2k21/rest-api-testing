@@ -44,7 +44,7 @@ public class UsersService {
         }
     }
 
-    public Users uddateUser(UsersDTO user) {
+    public Users updateUser(UsersDTO user) {
         checkUniqueEmailAddress(user);
         return usersRepository.save(modelMapper.map(user, Users.class));
     }
