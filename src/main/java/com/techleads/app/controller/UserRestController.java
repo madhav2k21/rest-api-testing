@@ -8,7 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(value = {"/users"})
@@ -27,9 +29,14 @@ public class UserRestController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Users>> findAllUsers() {
+    public ResponseEntity<List<UsersDTO>> findAllUsers() {
         List<Users> allUsers = usersService.findAllUsers();
-        return ResponseEntity.ok().body(allUsers);
+
+        List<UsersDTO> userDTOs = allUsers.stream().
+                map(user -> modelMapper.map(user, UsersDTO.class))
+                .collect(Collectors.toList());
+
+        return ResponseEntity.ok().body(userDTOs);
     }
 
     @PostMapping
