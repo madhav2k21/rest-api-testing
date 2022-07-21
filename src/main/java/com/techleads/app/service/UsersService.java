@@ -39,4 +39,8 @@ public class UsersService {
 
         return usersRepository.save(modelMapper.map(user, Users.class));
     }
+
+    public Users uddateUser(UsersDTO user){
+        return usersRepository.save(modelMapper.map(user, Users.class));
+    }
 }
