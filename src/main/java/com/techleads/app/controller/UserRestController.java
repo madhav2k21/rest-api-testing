@@ -35,11 +35,16 @@ public class UserRestController {
     public ResponseEntity<List<UsersDTO>> findAllUsers() {
         List<Users> allUsers = usersService.findAllUsers();
 
+        List<UsersDTO> userDTOs = convertToUserDTOs(allUsers);
+
+        return ResponseEntity.ok().body(userDTOs);
+    }
+
+    private List<UsersDTO> convertToUserDTOs(List<Users> allUsers) {
         List<UsersDTO> userDTOs = allUsers.stream().
                 map(user -> modelMapper.map(user, UsersDTO.class))
                 .collect(Collectors.toList());
-
-        return ResponseEntity.ok().body(userDTOs);
+        return userDTOs;
     }
 
     @PostMapping
